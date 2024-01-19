@@ -56,6 +56,10 @@ full barrier.
 #ifndef __CAAtomic_h__
 #define __CAAtomic_h__
 
+#ifndef __has_include
+#define __has_include(...) 0
+#endif
+
 #if __has_include(<atomic>)
 	#include <atomic>
 	#define USING_STDATOMIC 1

@@ -89,8 +89,8 @@ public:
 private:
 	SInt32		mRefCount;
 
-	CAReferenceCounted(const CAReferenceCounted &a);
-	CAReferenceCounted &operator=(const CAReferenceCounted &a);
+	CAReferenceCounted(const CAReferenceCounted &a)=delete;
+	CAReferenceCounted &operator=(const CAReferenceCounted &a)=delete;
 };
 
 

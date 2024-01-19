@@ -66,6 +66,7 @@ full barrier.
 	#include <intrin.h>
 	#pragma intrinsic(_InterlockedOr)
 	#pragma intrinsic(_InterlockedAnd)
+	#define USING_OS_LOCK 0
 #else
 	#include <CoreFoundation/CFBase.h>
 	#include <libkern/OSAtomic.h>
@@ -82,17 +83,13 @@ full barrier.
 		#define __WATCHOS_2_2 20200
 	#endif
 
+	// os/lock.h is only available on iOS 10.0 and macOS 10.12 and later.
 	#if (MAC_OS_X_VERSION_MIN_REQUIRED > __MAC_10_11_4) || (__IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_9_3) || (__TV_OS_VERSION_MIN_REQUIRED > __TVOS_9_2) || (__WATCH_OS_VERSION_MIN_REQUIRED > __WATCHOS_2_2) || TARGET_OS_VISION
+		#include <os/lock.h>
 		#define USING_OS_LOCK 1
 	#else
-		// os/lock.h is only available on iOS 10.0 and macOS 10.12 and later.
 		#define USING_OS_LOCK 0
 	#endif
-#endif
-
-#if __has_include(<os/lock.h>) && !(defined(USING_OS_LOCK) && USING_OS_LOCK == 0)
-	#include <os/lock.h>
-	#define USING_OS_LOCK 1
 #endif
 
 inline void CAMemoryBarrier() 

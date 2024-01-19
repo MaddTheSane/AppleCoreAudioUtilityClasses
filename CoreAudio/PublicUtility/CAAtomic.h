@@ -61,11 +61,6 @@ full barrier.
 	#define USING_STDATOMIC 1
 #endif
 
-#if __has_include(<os/lock.h>)
-	#include <os/lock.h>
-	#define USING_OS_LOCK 1
-#endif
-
 #if TARGET_OS_WIN32
 	#include <windows.h>
 	#include <intrin.h>
@@ -74,6 +69,30 @@ full barrier.
 #else
 	#include <CoreFoundation/CFBase.h>
 	#include <libkern/OSAtomic.h>
+	#ifndef __MAC_10_11_4
+		#define __MAC_10_11_4 101104
+	#endif
+	#ifndef __IPHONE_9_3
+		#define __IPHONE_9_3 90300
+	#endif
+	#ifndef __TVOS_9_2
+		#define __TVOS_9_2 90200
+	#endif
+	#ifndef __WATCHOS_2_2
+		#define __WATCHOS_2_2 20200
+	#endif
+
+	#if (MAC_OS_X_VERSION_MIN_REQUIRED > __MAC_10_11_4) || (__IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_9_3) || (__TV_OS_VERSION_MIN_REQUIRED > __TVOS_9_2) || (__WATCH_OS_VERSION_MIN_REQUIRED > __WATCHOS_2_2) || TARGET_OS_VISION
+		#define USING_OS_LOCK 1
+	#else
+		// os/lock.h is only available on iOS 10.0 and macOS 10.12 and later.
+		#define USING_OS_LOCK 0
+	#endif
+#endif
+
+#if __has_include(<os/lock.h>) && !(defined(USING_OS_LOCK) && USING_OS_LOCK == 0)
+	#include <os/lock.h>
+	#define USING_OS_LOCK 1
 #endif
 
 inline void CAMemoryBarrier() 

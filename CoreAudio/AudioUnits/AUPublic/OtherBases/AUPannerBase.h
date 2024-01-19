@@ -48,7 +48,7 @@
 #define __AUPannerBase_h__
 
 #include "AUBase.h"
-#include <math.h>
+#include <cmath>
 #include "CAAutoDisposer.h"
 #include "CAAudioChannelLayout.h"
 

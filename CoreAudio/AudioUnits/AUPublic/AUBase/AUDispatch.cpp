@@ -67,6 +67,7 @@
 #endif
 
 
+#if !CA_USE_AUDIO_PLUGIN_ONLY
 OSStatus		AUBase::ComponentEntryDispatch(ComponentParameters *params, AUBase *This)
 {
 	if (This == NULL) return kAudio_ParamError;
@@ -375,6 +376,7 @@ OSStatus		AUBase::ComponentEntryDispatch(ComponentParameters *params, AUBase *Th
 
 	return result;
 }
+#endif
 
 // Fast dispatch entry points -- these need to replicate all error-checking logic from above
 

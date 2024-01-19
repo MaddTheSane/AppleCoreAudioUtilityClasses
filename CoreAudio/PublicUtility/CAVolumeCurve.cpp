@@ -50,7 +50,7 @@
 
 #include "CAVolumeCurve.h"
 #include "CADebugMacros.h"
-#include <math.h>
+#include <cmath>
 
 //=============================================================================
 //	CAVolumeCurve

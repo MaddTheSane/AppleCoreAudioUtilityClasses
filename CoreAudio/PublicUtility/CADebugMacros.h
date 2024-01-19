@@ -91,6 +91,9 @@
 #define	ToSInt32(X)	((SInt32)(X))
 
 #pragma mark	Basic Definitions
+#ifndef CA_CANONICAL_DEPRECATED
+#define CA_CANONICAL_DEPRECATED
+#endif
 
 #if	DEBUG || CoreAudio_Debug
 	// can be used to break into debugger immediately, also see CADebugger

@@ -471,11 +471,13 @@ public:
 
 
 	/*! @method FormatIsCanonical */
-			bool				FormatIsCanonical(		const CAStreamBasicDescription &format);
+			bool				FormatIsCanonical(		const CAStreamBasicDescription &format)
+	CA_CANONICAL_DEPRECATED;
 
 	/*! @method MakeCanonicalFormat */
 			void				MakeCanonicalFormat(	CAStreamBasicDescription &	outDesc,
-														int							numChannels = 2);
+														int							numChannels = 2)
+	CA_CANONICAL_DEPRECATED;
 
 	/*! @method GetStreamFormat */
 	virtual const CAStreamBasicDescription &

@@ -82,9 +82,9 @@ void	CarbonEventHandler::WantEventTypes(EventTargetRef target, UInt32 inNumTypes
 	EventHandlerRef handler;
 	
 	if (CFDictionaryGetValueIfPresent (mHandlers, target, (const void **)&handler))	// if there is already a handler for the target, add the type
-		verify_noerr(AddEventTypesToHandler(handler, inNumTypes, inList));
+		__Verify_noErr(AddEventTypesToHandler(handler, inNumTypes, inList));
 	else {
-		verify_noerr(InstallEventHandler(target, TheEventHandler, inNumTypes, inList, this, &handler));
+		__Verify_noErr(InstallEventHandler(target, TheEventHandler, inNumTypes, inList, this, &handler));
 		CFDictionaryAddValue(mHandlers, target, handler);
 	}
 }

@@ -170,7 +170,7 @@ inline int TransformPerm_FS_O (SInt8 inPerm)
 #include <errno.h>
 #include <CoreAudio/CoreAudioTypes.h>
 
-inline OSErr AudioFileTranslateErrno(int err)
+inline OSStatus AudioFileTranslateErrno(int err)
 {
     switch (err) {
 #if !TARGET_OS_WIN32
@@ -187,13 +187,13 @@ inline OSErr AudioFileTranslateErrno(int err)
         return -54 /* kAudio_FilePermissionError */;
 #if !TARGET_OS_WIN32
     case EMLINK:
-        return (OSErr)'!pth' /* kAudio_BadFilePathError */;
+        return '!pth' /* kAudio_BadFilePathError */;
     case ENOTDIR:
     case ELOOP:
 #endif
     case ENOENT:
     default:
-			return (OSErr)kAudioFileUnspecifiedError;
+			return kAudioFileUnspecifiedError;
         }
 }
 

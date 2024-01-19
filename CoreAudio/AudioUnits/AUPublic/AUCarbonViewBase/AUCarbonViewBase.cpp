@@ -223,7 +223,7 @@ OSStatus	AUCarbonViewBase::EmbedControl(ControlRef ctl)
 
 void	AUCarbonViewBase::AddCarbonControl(AUCarbonViewControl::ControlType type, const CAAUParameter &param, ControlRef control)
 {
-	verify_noerr(EmbedControl(control));
+	__Verify_noErr(EmbedControl(control));
     
 	AUCarbonViewControl *auvc = new AUCarbonViewControl(this, mParameterListener, type, param, control);
 	auvc->Bind();
@@ -260,7 +260,7 @@ bool	AUCarbonViewBase::HandleEvent(EventHandlerCallRef inHandlerRef, EventRef ev
 					/*	<--	kEventParamImageSize (out, typeHISize)
 					 *		On exit, contains the size of the entire scrollable view.
 					 */
-					HISize originalSize = { mBottomRight.h, mBottomRight.v };
+					HISize originalSize = { static_cast<CGFloat>(mBottomRight.h), static_cast<CGFloat>(mBottomRight.v) };
 					verify_noerr(SetEventParameter(event, kEventParamImageSize, typeHISize, sizeof(HISize), &originalSize));
 					
 					// [2/4]

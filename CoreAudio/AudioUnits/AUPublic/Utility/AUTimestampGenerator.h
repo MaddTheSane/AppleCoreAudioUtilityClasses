@@ -47,7 +47,7 @@
 #ifndef __AUTimestampGenerator_h__
 #define __AUTimestampGenerator_h__
 
-#include <math.h>
+#include <cmath>
 #include "CAHostTimeBase.h"
 #include <stdio.h>
 

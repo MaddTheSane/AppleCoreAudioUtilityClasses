@@ -329,13 +329,13 @@ bool	AUCarbonViewControl::HandleEvent(EventHandlerCallRef inHandlerRef, EventRef
 					mLastControl = this;
 				case kEventControlValueFieldChanged:
 					GetEventParameter(event, kEventParamDirectObject, typeControlRef, NULL, sizeof(ControlRef), NULL, &control);
-					verify(control == mControl);
+					__Verify(control == mControl);
 					ControlToParameter();
 					return handled;			
 				case kEventControlClick:
 					if (isWriteOnlyBoolParameter) {
 						GetEventParameter(event, kEventParamDirectObject, typeControlRef, NULL, sizeof(ControlRef), NULL, &control);
-						verify(control == mControl);
+						__Verify(control == mControl);
 						ControlToParameter();
 					} else if (mLastControl != this) {
 						if (mLastControl != NULL) {

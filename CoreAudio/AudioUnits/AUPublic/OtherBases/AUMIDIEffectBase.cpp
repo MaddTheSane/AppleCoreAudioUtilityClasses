@@ -45,6 +45,9 @@
  
 */
 #include "AUMIDIEffectBase.h"
+#if !TARGET_OS_IPHONE
+#include <CoreServices/CoreServices.h>
+#endif
 
 // compatibility with older OS SDK releases
 typedef OSStatus
@@ -124,7 +127,7 @@ OSStatus			AUMIDIEffectBase::SetProperty(	AudioUnitPropertyID			inID,
 }
 
 
-#if !TARGET_OS_IPHONE
+#if !CA_USE_AUDIO_PLUGIN_ONLY && !TARGET_OS_IPHONE
 OSStatus			AUMIDIEffectBase::ComponentEntryDispatch(ComponentParameters *			params,
 								AUMIDIEffectBase *			This)
 {

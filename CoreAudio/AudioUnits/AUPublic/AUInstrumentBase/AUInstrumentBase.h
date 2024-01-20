@@ -58,6 +58,15 @@
 #include "SynthNote.h"
 #include "SynthElement.h"
 
+#ifndef __has_include
+#define __has_include(...) 0
+#endif
+
+#if __has_include(<atomic>)
+	#include <atomic>
+	#define USING_STDATOMIC 1
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef LockFreeFIFOWithFree<SynthEvent> SynthEventQueue;
@@ -169,7 +178,16 @@ public:
 	friend class SynthGroupElement;
 protected:
 
-	UInt32				NextNoteID() { return OSAtomicIncrement32((int32_t *)&mNoteIDCounter); }
+	UInt32				NextNoteID() {
+#if USING_STDATOMIC
+		return (std::atomic_fetch_add_explicit(
+				(volatile std::atomic_int32_t*) &mNoteIDCounter, 1,
+				std::memory_order_relaxed) + 1);
+
+#else
+		return OSAtomicIncrement32((int32_t *)&mNoteIDCounter);
+#endif
+	}
 	
 	
 	// call SetNotes in your Initialize() method to give the base class your note structures and to set the maximum 

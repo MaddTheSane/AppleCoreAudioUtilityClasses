@@ -284,8 +284,8 @@ protected:
 	}
 
 private:
-	CAExtAudioFile(const CAExtAudioFile &) { }	// prohibit
-	CAExtAudioFile & operator = (const CAExtAudioFile &) { return *this; } // prohibit
+	CAExtAudioFile(const CAExtAudioFile &) = delete; // prohibit
+	CAExtAudioFile & operator = (const CAExtAudioFile &) = delete; // prohibit
 
 private:
 	ExtAudioFileRef				mExtAudioFile;

@@ -46,6 +46,31 @@
 */
 #include <libkern/OSAtomic.h>
 
+#ifndef __has_include
+#define __has_include(...) 0
+#endif
+
+#if __has_include(<atomic>)
+	#include <atomic>
+	#define USING_STDATOMIC 1
+#endif
+
+struct OurAtomicHelper {
+	static inline bool
+	OurAtomicCompareAndSwap32(int32_t __oldValue, int32_t __newValue, volatile int32_t *__theValue)
+	{
+#if USING_STDATOMIC
+		return std::atomic_compare_exchange_strong_explicit((volatile std::atomic_int32_t*)__theValue,
+															&__oldValue, __newValue,
+															std::memory_order_relaxed,
+															std::memory_order_relaxed);
+#else
+		return OSAtomicCompareAndSwap32(__oldValue, __newValue, __theValue);
+#endif
+	}
+};
+
+
 template <class ITEM>
 class LockFreeFIFOWithFree
 {
@@ -88,15 +113,15 @@ public:
 		if (mReadIndex == mWriteIndex) return NULL;
 		return &mItems[mReadIndex];
 	}
-	void AdvanceWritePtr() { OSAtomicCompareAndSwap32(mWriteIndex, (mWriteIndex + 1) & mMask, &mWriteIndex); }
-	void AdvanceReadPtr()  { OSAtomicCompareAndSwap32(mReadIndex,  (mReadIndex  + 1) & mMask, &mReadIndex); }
+	void AdvanceWritePtr() { OurAtomicHelper::OurAtomicCompareAndSwap32(mWriteIndex, (mWriteIndex + 1) & mMask, &mWriteIndex); }
+	void AdvanceReadPtr()  { OurAtomicHelper::OurAtomicCompareAndSwap32(mReadIndex,  (mReadIndex  + 1) & mMask, &mReadIndex); }
 private:
 	ITEM* FreeItem() 
 	{
 		if (mFreeIndex == mReadIndex) return NULL;
 		return &mItems[mFreeIndex];
 	}
-	void AdvanceFreePtr() { OSAtomicCompareAndSwap32(mFreeIndex, (mFreeIndex + 1) & mMask, &mFreeIndex); }
+	void AdvanceFreePtr() { OurAtomicHelper::OurAtomicCompareAndSwap32(mFreeIndex, (mFreeIndex + 1) & mMask, &mFreeIndex); }
 	
 	void FreeItems() 
 	{
@@ -156,8 +181,8 @@ public:
 	
 		// the CompareAndSwap will always succeed. We use CompareAndSwap because it calls the PowerPC sync instruction,
 		// plus any processor bug workarounds for various CPUs.
-	void AdvanceWritePtr() { OSAtomicCompareAndSwap32(mWriteIndex, (mWriteIndex + 1) & mMask, &mWriteIndex); }
-	void AdvanceReadPtr()  { OSAtomicCompareAndSwap32(mReadIndex,  (mReadIndex  + 1) & mMask, &mReadIndex); }
+	void AdvanceWritePtr() { OurAtomicHelper::OurAtomicCompareAndSwap32(mWriteIndex, (mWriteIndex + 1) & mMask, &mWriteIndex); }
+	void AdvanceReadPtr()  { OurAtomicHelper::OurAtomicCompareAndSwap32(mReadIndex,  (mReadIndex  + 1) & mMask, &mReadIndex); }
 	
 private:
 	

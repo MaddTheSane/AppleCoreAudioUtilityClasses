@@ -160,7 +160,7 @@ public:
 	
 private:
 	/*! @ctor AUBufferList */
-	AUBufferList(AUBufferList &) { }	// prohibit copy constructor
+	AUBufferList(AUBufferList &) = delete;	// prohibit copy constructor
 
 	/*! @var mPtrState */
 	EPtrState					mPtrState;
